@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egyszerű Számológép</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        
+        .calculator {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 300px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input[type="number"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
+        .operation-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .operation-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .operation-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .clear-btn {
+            background-color: #f44336;
+            color: white;
+            grid-column: span 4;
+        }
+        
+        .clear-btn:hover {
+            background-color: #da190b;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #f44336;
+        }
+        
+        .success {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Egyszerű Számológép</h1>
+        
+        <div class="input-group">
+            <label for="number1">Első szám:</label>
+            <input type="number" id="number1" placeholder="Írj be egy számot" step="any">
+        </div>
+        
+        <div class="input-group">
+            <label for="number2">Második szám:</label>
+            <input type="number" id="number2" placeholder="Írj be egy számot" step="any">
+        </div>
+        
+        <div class="operation-buttons">
+            <button class="operation-btn" onclick="calculate('add')" id="add-btn">+</button>
+            <button class="operation-btn" onclick="calculate('subtract')" id="subtract-btn">-</button>
+            <button class="operation-btn" onclick="calculate('multiply')" id="multiply-btn">×</button>
+            <button class="operation-btn" onclick="calculate('divide')" id="divide-btn">÷</button>
+            <button class="clear-btn" onclick="clearAll()" id="clear-btn">Törlés</button>
+        </div>
+        
+        <div id="result" class="result">
+            Eredmény: -
+        </div>
+    </div>
+
+    <script>
+        function calculate(operation) {
+            const num1 = parseFloat(document.getElementById('number1').value);
+            const num2 = parseFloat(document.getElementById('number2').value);
+            const resultDiv = document.getElementById('result');
+            
+            // Input validáció
+            if (isNaN(num1) || isNaN(num2)) {
+                showResult('Kérlek adj meg mindkét számot!', 'error');
+                return;
+            }
+            
+            let result;
+            let operationSymbol;
+            
+            switch(operation) {
+                case 'add':
+                    result = num1 + num2;
+                    operationSymbol = '+';
+                    break;
+                case 'subtract':
+                    result = num1 - num2;
+                    operationSymbol = '-';
+                    break;
+                case 'multiply':
+                    result = num1 * num2;
+                    operationSymbol = '×';
+                    break;
+                case 'divide':
+                    if (num2 === 0) {
+                        showResult('Nullával nem lehet osztani!', 'error');
+                        return;
+                    }
+                    result = num1 / num2;
+                    operationSymbol = '÷';
+                    break;
+                default:
+                    showResult('Érvénytelen művelet!', 'error');
+                    return;
+            }
+            
+            // Eredmény kerekítése 2 tizedesjegyre ha szükséges
+            result = Math.round(result * 100) / 100;
+            
+            showResult(`${num1} ${operationSymbol} ${num2} = ${result}`, 'success');
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = `result ${type}`;
+        }
+        
+        function clearAll() {
+            document.getElementById('number1').value = '';
+            document.getElementById('number2').value = '';
+            showResult('Eredmény: -', '');
+        }
+        
+        // Enter billentyű támogatása
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                calculate('add');
+            }
+        });
+    </script>
+</body>
+</html>

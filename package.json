@@ -1,0 +1,15 @@
+{
+  "name": "calculator-project",
+  "version": "1.0.0",
+  "description": "Egyszerű számológép alkalmazás",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": ["ai", "calculator", "javascript", "express", "html"],
+  "author": "",
+  "license": "ISC"
+}
